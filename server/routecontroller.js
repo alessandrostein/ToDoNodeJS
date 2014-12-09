@@ -13,25 +13,18 @@ function RouteController(server, app) {
 
   function auth(route, model) {
     ctrl.app.post(route, function(req, res) {
-      debugger;
       model.find(req.body, function(err, collection) {
         var status = false;
         if (err) {
           console.log('Houve um erro ao obter os dados:\n' + err);
-        } else {
-            if (collection.length) {
-              status = true;
-            }
-
-          res.redirect("/index?id=2")
-        }
+          res.redirect("/unauthorized");
+        } else { collection.length && res.redirect("/index?id=" + collection.id); }
       });
     });
   }
 
   function createGetter(route, model) {
     ctrl.app.get(route, function(req, res) {
-      debugger;
       model.find(req.params, function(err, collection) {
         if (err) {
           console.log('Houve um erro ao obter os dados:\n' + err);

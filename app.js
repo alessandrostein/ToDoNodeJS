@@ -41,7 +41,12 @@ function createRoutes(router) {
 	});
 
   app.get('/index', function(req, res) {
+    debugger;
     res.redirect('/views/index.html');
+  });
+
+  app.get('/unauthorized', function(req, res) {
+    res.redirect('/views/login.html');
   });
 
 	app.get('/login', function(req, res) {
