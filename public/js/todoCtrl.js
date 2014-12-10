@@ -6,11 +6,15 @@
  * - exposes the model to the template and provides event handlers
  */
 angular.module('todo')
-	.controller('TodoCtrl', function TodoCtrl($scope, $routeParams, $filter, todoStorage, $resource, Task) {
+	.controller('TodoCtrl', function TodoCtrl($scope, $filter, todoStorage, $resource, Task, $http) {
 		'use strict';
 
-		var todos = $scope.todos = todoStorage.get();
-		var task = new Task();
+		var todos = [];
+		// var task = new Task();
+
+		Task.query(function(result){
+			todos = $scope.todos = result;
+		});
 
 		$scope.newTodo = '';
 		$scope.editedTodo = null;
@@ -24,33 +28,25 @@ angular.module('todo')
 			}
 		}, true);
 
-		// Monitor the current route for changes and adjust the filter accordingly.
-		$scope.$on('$routeChangeSuccess', function () {
-			var status = $scope.status = $routeParams.status || '';
-
-			$scope.statusFilter = (status === 'active') ?
-				{ completed: false } : (status === 'completed') ?
-				{ completed: true } : null;
-		});
-
-		$scope.addTodo = function () {
+		$scope.addTodo = function ($event) {
+			if ($event.which !== 13) return;
 			var newTodo = $scope.newTodo.trim();
 			if (!newTodo.length) {
 				return;
 			}
 
+			var obj = {};
+
 			var id = todos.push({
+				id: todos.length,
 				title: newTodo,
 				completed: false
 			});
 
-			task.save(angular.extend({
-				id: id,
-			}, todos[id-1]), function(ok){
-				alert("Ok");
-			});
+			obj = todos[id-1];
 
-			debugger;
+			Task.save(obj);
+
 			$scope.newTodo = '';
 		};
 
@@ -61,12 +57,14 @@ angular.module('todo')
 		};
 
 		$scope.doneEditing = function (todo) {
-			$scope.editedTodo = null;
-			todo.title = todo.title.trim();
+			$http.put("/task/" + todo.id, todo).success(function(){
+					$scope.editedTodo = null;
+					todo.title = todo.title.trim();
 
-			if (!todo.title) {
-				$scope.removeTodo(todo);
-			}
+					if (!todo.title) {
+						$scope.removeTodo(todo);
+					}
+				});
 		};
 
 		$scope.revertEditing = function (todo) {
@@ -75,7 +73,9 @@ angular.module('todo')
 		};
 
 		$scope.removeTodo = function (todo) {
-			todos.splice(todos.indexOf(todo), 1);
+			Task.delete({id: todo.id}, function(){
+				todos.splice(todos.indexOf(todo), 1);
+			});
 		};
 
 		$scope.clearCompletedTodos = function () {

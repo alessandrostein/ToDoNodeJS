@@ -5,4 +5,4 @@
  *
  * @type {angular.Module}
  */
-angular.module('todo', ['restful']);
+angular.module('todo', ['restful', 'ngResource']);

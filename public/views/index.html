@@ -1,19 +1,19 @@
 <!doctype html>
-<html lang="en" data-framework="angularjs" ng-app="todo">
+<html lang="en" ng-app="todo">
 	<head>
 		<meta charset="utf-8">
 		<title>AngularJS • TodoMVC</title>
 		<link rel="stylesheet" href="../bower_components/todomvc-common/base.css">
 		<style>[ng-cloak] { display: none; }</style>
 	</head>
-	<body>
+	<body ng-controller="TodoCtrl">
 
 
 			<section id="todoapp">
 				<header id="header">
 					<h1>todos</h1>
-					<form id="todo-form" ng-click="addTodo()">
-						<input id="new-todo" placeholder="What needs to be done?" ng-model="newTodo" autofocus>
+					<form id="todo-form">
+						<input id="new-todo" placeholder="What needs to be done?" ng-model="newTodo" autofocus ng-keypress="addTodo($event)">
 					</form>
 				</header>
 				<section id="main" ng-show="todos.length" ng-cloak>
@@ -62,7 +62,7 @@
 			</footer>
 
 		<script src="../bower_components/angular/angular.js"></script>
-		<script src="../bower_components/angular-route/angular-route.js"></script>
+		<script src="../bower_components/angular/angular-resource.min.js"></script>
 		<script src="../js/app.js"></script>
 		<script src="../js/todoCtrl.js"></script>
 		<script src="../js/services/todoStorage.js"></script>

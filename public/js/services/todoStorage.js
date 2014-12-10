@@ -3,7 +3,7 @@
 /**
  * Services that persists and retrieves TODOs from localStorage
  */
-angular.module('todomvc')
+angular.module('todo')
 	.factory('todoStorage', function () {
 		'use strict';
 

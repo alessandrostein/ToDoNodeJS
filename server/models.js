@@ -25,7 +25,7 @@ module.exports = {
 
 		var Task = mongoose.model('Task', TaskSchema);
 		var User = mongoose.model('User', UserSchema);
-		this.models = { User: Task, User: User };
+		this.models = { Task: Task, User: User };
 		next(this.models);
 	}
 };

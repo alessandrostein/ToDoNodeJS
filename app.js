@@ -19,9 +19,9 @@ var server = app.listen(3000, function() {
 });
 
 function createRoutes(router) {
-	router.createGETRoute('/users', User);
+	router.createGETRoute('/user', User);
 	router.createGETRoute('/user/:id', User);
-	router.createGETRoute('/tasks', Task);
+	router.createGETRoute('/task', Task);
 	router.createGETRoute('/task/:id', Task);
 
   router.createGETRoute('/index/:id', User);
