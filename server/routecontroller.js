@@ -1,3 +1,11 @@
+var extend = function(dest, orig) {
+  for (var i in orig) {
+    if (Object.prototype.hasOwnProperty.call(orig, i)) {
+      dest[i] = orig[i];
+    }
+  }
+};
+
 module.exports = {
 	init: function(server, app, next) {
     next(new RouteController(server, app));
@@ -37,7 +45,12 @@ function RouteController(server, app) {
 
   function createUpdater(route, model, redirectUrl) {
     ctrl.app.put(route, function(req, res) {
-      model.update({ id: req.params.id }, req.body, function(err) {
+      debugger;
+      var obj = {};
+      extend(obj, req.body);
+      delete obj.__v;
+      delete obj._id;
+      model.update({ id: req.params.id }, obj, function(err) {
         if (err) {
           console.log(err);
         } else {
